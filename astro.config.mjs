@@ -18,7 +18,7 @@ function resolveBase()  {
   return '/';
 }
 
-function resolveSite(): string {
+function resolveSite() {
   // 优先使用环境变量 SITE_URL
   if (process.env.SITE_URL) {
     const url = process.env.SITE_URL.replace(/\/+$/, '');
