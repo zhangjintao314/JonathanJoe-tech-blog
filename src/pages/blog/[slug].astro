@@ -1,0 +1,42 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import CodeEnhancements from "@/components/CodeEnhancements.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts", ({ data }) => !data.draft);
+  return posts.map((post) => ({
+  params: {
+    slug: post.id
+  },
+  props: { post }
+}));
+}
+const { post } = Astro.props;
+const { Content, headings } = await post.render();
+---
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article class="container-wide max-w-6xl py-16" data-pagefind-body>
+    <img class="mb-10 aspect-[1200/420] w-full rounded-2xl border border-white/10 object-cover" src={`${import.meta.env.BASE_URL}covers/${post.id}.svg`} alt={`${post.data.title} 封面`} />
+    <a class="text-sm text-violet-200 hover:text-white" href={`${import.meta.env.BASE_URL}blog/`}>← 返回文章列表</a>
+    <header class="mt-10 border-b border-white/10 pb-9">
+      <div class="flex flex-wrap items-center gap-3 text-xs text-slate-400">
+        <span class="text-violet-300">{post.data.category}</span>
+        <span>·</span><time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString("zh-CN")}</time>
+        <span>·</span><span>{post.data.author}</span>
+      </div>
+      <h1 class="mt-5 text-4xl font-black leading-tight sm:text-5xl">{post.data.title}</h1>
+      <p class="mt-5 text-lg leading-8 text-slate-400">{post.data.description}</p>
+      <div class="mt-5 flex flex-wrap gap-2">{post.data.tags.map((tag) => <span class="rounded-full border border-white/10 px-3 py-1 text-xs text-slate-400">#{tag}</span>)}</div>
+    </header>
+    <div class="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_230px]">
+      <div class="prose min-w-0 max-w-none"><Content /></div>
+      {headings.length > 0 && <aside class="hidden lg:block"><div class="sticky top-28"><p class="mb-4 text-xs font-semibold tracking-[.18em] text-slate-300">ON THIS PAGE</p><nav aria-label="文章目录" class="space-y-1">{headings.filter(h=>h.depth===2||h.depth===3).map(h=><a class={`toc-link toc-depth-${h.depth}`} href={`#${h.slug}`}>{h.text}</a>)}</nav></div></aside>}
+    </div>
+    <CodeEnhancements />
+    <div class="mt-16 border-t border-white/10 pt-7">
+      <p class="text-sm text-slate-400">如果这篇文章对你有帮助，欢迎通过 GitHub 交流。</p>
+      <a class="mt-4 inline-block text-sm text-violet-200" href={`${import.meta.env.BASE_URL}blog/`}>继续阅读 →</a>
+    </div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,13 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+<BaseLayout title="全文搜索" description="搜索JonathanJoe的技术文章与项目记录。">
+<section class="container-wide min-h-[65vh] max-w-4xl py-20"><p class="text-xs tracking-[.25em] text-violet-300">SEARCH THE KNOWLEDGE BASE</p><h1 class="mt-3 text-5xl font-black">全文搜索<span class="gradient-text">.</span></h1><p class="mt-4 text-slate-400">搜索文章标题、摘要与正文内容。</p>
+<form id="search-form" class="mt-9 flex gap-2"><input id="search-input" type="search" placeholder="例如：Astro、扩散模型、C++…" class="min-w-0 flex-1 rounded-full border border-white/15 bg-slate-950/70 px-5 py-3 text-sm text-white outline-none focus:border-violet-300/70"/><button class="btn-primary" type="submit">搜索</button></form><p id="search-status" class="mt-5 text-sm text-slate-500" aria-live="polite">正在加载搜索索引…</p><div id="search-results" class="mt-5 space-y-3"></div></section>
+<script define:vars={{ base: import.meta.env.BASE_URL }}>
+const form=document.querySelector("#search-form"),input=document.querySelector("#search-input"),status=document.querySelector("#search-status"),results=document.querySelector("#search-results");let pagefind;
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+try{pagefind=await import(`${base}pagefind/pagefind.js`);await pagefind.options({baseUrl:base});if(status)status.textContent="搜索索引已就绪。";}catch{if(status)status.textContent="搜索索引尚未生成。请运行 npm run build 生成生产搜索索引。";}
+const search=async q=>{if(!pagefind||!results||!status)return;if(!q.trim()){results.innerHTML="";status.textContent="请输入关键词。";return;}status.textContent="正在搜索…";const found=await pagefind.search(q);const rows=await Promise.all(found.results.slice(0,20).map(x=>x.data()));status.textContent=`找到 ${found.results.length} 条结果，显示前 ${rows.length} 条。`;results.innerHTML=rows.map(x=>`<a class="panel card-hover block p-5" href="${esc(x.url)}"><h2 class="font-semibold text-violet-100">${esc(x.meta?.title||"未命名文章")}</h2><p class="mt-2 text-sm leading-6 text-slate-400">${x.excerpt||""}</p><span class="mt-3 inline-block text-xs text-violet-200">打开内容 →</span></a>`).join("")||'<div class="panel p-5 text-sm text-slate-400">没有匹配内容，试试其他关键词。</div>';};
+form?.addEventListener("submit",e=>{e.preventDefault();search(input?.value||"");});const initial=new URLSearchParams(location.search).get("q");if(initial&&input){input.value=initial;search(initial);}
+</script></BaseLayout>

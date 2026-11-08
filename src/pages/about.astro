@@ -1,0 +1,19 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site } from "@/data/site";
+---
+<BaseLayout title="关于我" description="关于 Jonathan Joe 与南山逐北。">
+  <section class="container-wide max-w-4xl py-20">
+    <p class="text-xs tracking-[.25em] text-violet-300">ABOUT</p>
+    <h1 class="mt-3 text-5xl font-black">关于<span class="gradient-text">我.</span></h1>
+    <div class="panel mt-10 p-7 sm:p-10">
+      <h2 class="text-2xl font-bold">{site.englishName}</h2>
+      <p class="mt-5 leading-8 text-slate-300">热爱科学、技术与创造，关注软件工程、人工智能、计算机系统和软硬件结合的实践。</p>
+      <p class="mt-4 leading-8 text-slate-400">这个网站用于记录学习过程、技术研究、项目复盘与个人思考。我相信理解原理与动手构建同样重要。</p>
+      <div class="mt-8 border-t border-white/10 pt-6">
+        <p class="text-sm font-semibold">关注方向</p>
+        <div class="mt-4 flex flex-wrap gap-2">{["C++ / Systems", "Generative AI", "World Models", "Web Engineering", "Computer Graphics", "Embedded Systems"].map((x) => <span class="rounded-full border border-violet-300/20 bg-violet-300/5 px-3 py-2 text-xs text-violet-100">{x}</span>)}</div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

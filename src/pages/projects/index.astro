@@ -1,0 +1,24 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { projects } from "@/data/projects";
+import GitHubRepos from "@/components/GitHubRepos.astro";
+---
+<BaseLayout title="项目与实验" description="个人工程项目、AI 实验与技术探索。">
+  <section class="container-wide py-20">
+    <p class="text-xs tracking-[.25em] text-violet-300">BUILD IN PUBLIC</p>
+    <h1 class="mt-3 text-5xl font-black">项目与实验<span class="gradient-text">.</span></h1>
+    <p class="mt-5 max-w-2xl leading-8 text-slate-400">想法只有经过实现、测试与迭代，才真正成为工程。</p>
+    <div class="mt-12 grid gap-5 md:grid-cols-2">
+      {projects.map((project, index) => (
+        <article class="panel card-hover p-7">
+          <div class="flex items-center justify-between"><span class="text-xs tracking-widest text-slate-500">PROJECT / 0{index + 1}</span><span class="rounded-full bg-emerald-300/10 px-3 py-1 text-xs text-emerald-200">{project.status}</span></div>
+          <p class="mt-7 text-xs text-violet-300">{project.category}</p>
+          <h2 class="mt-2 text-2xl font-bold">{project.title}</h2>
+          <p class="mt-4 leading-8 text-slate-400">{project.description}</p>
+          <div class="mt-6 flex flex-wrap gap-2">{project.tags.map((tag) => <span class="rounded-full border border-white/10 px-3 py-1 text-xs text-slate-400">{tag}</span>)}</div>
+        </article>
+      ))}
+    </div>
+    <GitHubRepos />
+  </section>
+</BaseLayout>

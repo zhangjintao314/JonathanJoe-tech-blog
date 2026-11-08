@@ -1,0 +1,29 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+const posts = (await getCollection("posts", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+<BaseLayout title="技术文章" description="软件工程、人工智能与系统实践文章。">
+  <section class="container-wide py-20">
+    <p class="text-xs tracking-[.25em] text-violet-300">THE JOURNAL</p>
+    <h1 class="mt-3 text-5xl font-black">技术文章<span class="gradient-text">.</span></h1>
+    <p class="mt-5 max-w-2xl leading-8 text-slate-400">把问题拆开，把原理弄懂，再用工程实践验证想法。</p>
+    <div class="mt-12 grid gap-4 md:grid-cols-2">
+      {posts.map((post) => (
+        <article class="panel card-hover p-6 sm:p-8">
+          <img class="mb-5 aspect-[1200/420] w-full rounded-xl border border-white/10 object-cover" src={`${import.meta.env.BASE_URL}covers/${post.id}.svg`} alt={`${post.data.title} 封面`} loading="lazy" />
+          <div class="flex flex-wrap items-center gap-3 text-xs text-slate-400">
+            <span class="text-violet-300">{post.data.category}</span>
+            <span>·</span><time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString("zh-CN")}</time>
+          </div>
+          <h2 class="mt-5 text-2xl font-bold">{post.data.title}</h2>
+          <p class="mt-4 leading-7 text-slate-400">{post.data.description}</p>
+          <div class="mt-5 flex flex-wrap gap-2">{post.data.tags.map((tag) => <span class="rounded-full bg-white/5 px-3 py-1 text-xs text-slate-400">#{tag}</span>)}</div>
+          <a class="mt-7 inline-block text-sm text-violet-200" href={`${import.meta.env.BASE_URL}blog/${post.id}/`}>阅读文章 →</a>
+        </article>
+      ))}
+    </div>
+    {posts.length === 0 && <p class="mt-10 text-slate-400">还没有发布文章。</p>}
+  </section>
+</BaseLayout>
