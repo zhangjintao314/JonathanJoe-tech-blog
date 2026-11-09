@@ -1,3 +1,21 @@
 <script>
-document.querySelectorAll("article.prose pre").forEach((pre)=>{if(pre.querySelector(".copy-code-button"))return;const button=document.createElement("button");button.type="button";button.className="copy-code-button";button.textContent="复制代码";button.setAttribute("aria-label","复制代码块内容");button.addEventListener("click",async()=>{const code=pre.querySelector("code")?.innerText??pre.innerText;try{await navigator.clipboard.writeText(code);button.textContent="已复制 ✓";}catch{button.textContent="复制失败";}setTimeout(()=>button.textContent="复制代码",1600);});pre.append(button);});
+document.querySelectorAll("article.prose pre").forEach((pre) => {
+  if (pre.querySelector(".copy-code-button")) return;
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "copy-code-button";
+  button.textContent = "复制代码";
+  button.setAttribute("aria-label", "复制代码块内容");
+  button.addEventListener("click", async () => {
+    const code = pre.querySelector("code")?.textContent ?? pre.textContent ?? "";
+    try {
+      await navigator.clipboard.writeText(code);
+      button.textContent = "已复制 ✓";
+    } catch {
+      button.textContent = "复制失败";
+    }
+    setTimeout(() => (button.textContent = "复制代码"), 1600);
+  });
+  pre.append(button);
+});
 </script>

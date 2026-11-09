@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content, headings } = await post.render();
 ---
-<BaseLayout title={post.data.title} description={post.data.description}>
+<BaseLayout title={post.data.title} description={post.data.description} type="article" image={`${import.meta.env.BASE_URL}covers/${post.id}.svg`}>
   <article class="container-wide max-w-6xl py-16" data-pagefind-body>
     <img class="mb-10 aspect-[1200/420] w-full rounded-2xl border border-white/10 object-cover" src={`${import.meta.env.BASE_URL}covers/${post.id}.svg`} alt={`${post.data.title} 封面`} />
     <a class="text-sm text-violet-200 hover:text-white" href={`${import.meta.env.BASE_URL}blog/`}>← 返回文章列表</a>

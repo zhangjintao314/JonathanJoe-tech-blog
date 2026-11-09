@@ -62,7 +62,7 @@ a { color: inherit; text-decoration: none; }
 .prose ul, .prose ol { padding-left: 1.5rem; margin: 1rem 0; }
 .prose li { margin: .4rem 0; }
 .prose blockquote { border-left: 3px solid #8b7bff; padding-left: 1rem; color: #aeb6d4; }
-.prose pre { overflow-x: auto; border: 1px solid #303650; border-radius: 14px; padding: 1rem; background: #080b16 !important; }
+.prose pre { position: relative; overflow-x: auto; border: 1px solid #303650; border-radius: 14px; padding: 3.25rem 1rem 1rem; background: #080b16 !important; }
 .prose :not(pre) > code { color: #d9d2ff; background: #292641; padding: .15rem .4rem; border-radius: 5px; }
 .prose img { border-radius: 14px; max-width: 100%; }
 .container-wide { width: min(1120px, calc(100% - 2rem)); margin-inline: auto; }
@@ -75,7 +75,6 @@ a { color: inherit; text-decoration: none; }
 
 @keyframes rise-in { from {opacity:0;transform:translateY(18px)} to {opacity:1;transform:translateY(0)} }
 .animate-rise { animation: rise-in .7s cubic-bezier(.2,.7,.2,1) both; }
-.prose pre { position:relative; padding-top:3.25rem; }
 .copy-code-button { position:absolute;top:.65rem;right:.7rem;border:1px solid #424866;border-radius:7px;padding:.3rem .65rem;color:#c9c5ee;font-size:11px;background:#171a2b;cursor:pointer; }
 .copy-code-button:hover {background:#282541;border-color:#8b7bff}
 .toc-link {display:block;border-left:1px solid #424866;padding:.35rem 0 .35rem .8rem;color:#9da6c5;font-size:.82rem;transition:color .2s,border-color .2s}

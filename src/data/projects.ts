@@ -11,7 +11,7 @@ export const projects = [
     category: "Web Engineering",
     description: "围绕人工智能、软件工程与开源技术建立的知识交流空间。",
     status: "Online",
-    tags: ["Flarum", "Community", "Open Source"]
+    tags: ["Astro", "Blog", "Open Source"]
   },
   {
     title: "Solar System Simulator",
