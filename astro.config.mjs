@@ -3,7 +3,7 @@ import sitemap from '@astrojs/sitemap';
 
 // 自动识别 base path：项目仓库模式（username/repository）需要子路径，
 // 用户/组织站点（username.github.io）使用根路径。
-function resolveBase(): string {
+function resolveBase()  {
   // 优先使用环境变量 SITE_BASE（手动覆盖）
   if (process.env.SITE_BASE) return process.env.SITE_BASE;
   // GitHub Actions 环境下，从 GITHUB_REPOSITORY 推断
@@ -18,7 +18,7 @@ function resolveBase(): string {
   return '/';
 }
 
-function resolveSite(): string {
+function resolveSite() {
   // 优先使用环境变量 SITE_URL
   if (process.env.SITE_URL) {
     const url = process.env.SITE_URL.replace(/\/+$/, '');
