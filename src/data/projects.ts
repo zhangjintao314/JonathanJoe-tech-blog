@@ -7,11 +7,11 @@ export const projects = [
     tags: ["Diffusion", "Multimodal", "Video"]
   },
   {
-    title: "JonathanJoe-blog",
+    title: "南山逐北 · 技术社区",
     category: "Web Engineering",
     description: "围绕人工智能、软件工程与开源技术建立的知识交流空间。",
     status: "Online",
-    tags: ["Astro", "Blog", "Open Source"]
+    tags: ["Flarum", "Community", "Open Source"]
   },
   {
     title: "Solar System Simulator",

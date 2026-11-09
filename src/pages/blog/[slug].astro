@@ -3,22 +3,20 @@ import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import CodeEnhancements from "@/components/CodeEnhancements.astro";
 
+const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const slugOf = (id: string) => id.replace(/\.(md|mdx)$/i, "");
+
 export async function getStaticPaths() {
   const posts = await getCollection("posts", ({ data }) => !data.draft);
-  return posts.map((post) => ({
-  params: {
-    slug: post.id
-  },
-  props: { post }
-}));
+  return posts.map((post) => ({ params: { slug: slugOf(post.id) }, props: { post } }));
 }
 const { post } = Astro.props;
 const { Content, headings } = await post.render();
 ---
-<BaseLayout title={post.data.title} description={post.data.description} type="article" image={`${import.meta.env.BASE_URL}covers/${post.id}.svg`}>
+<BaseLayout title={post.data.title} description={post.data.description}>
   <article class="container-wide max-w-6xl py-16" data-pagefind-body>
-    <img class="mb-10 aspect-[1200/420] w-full rounded-2xl border border-white/10 object-cover" src={`${import.meta.env.BASE_URL}covers/${post.id}.svg`} alt={`${post.data.title} 封面`} />
-    <a class="text-sm text-violet-200 hover:text-white" href={`${import.meta.env.BASE_URL}blog/`}>← 返回文章列表</a>
+    <img class="mb-10 aspect-[1200/420] w-full rounded-2xl border border-white/10 object-cover" src={`${base}covers/${slugOf(post.id)}.svg`} alt={`${post.data.title} 封面`} />
+    <a class="text-sm text-violet-200 hover:text-white" href={`${base}blog/`}>← 返回文章列表</a>
     <header class="mt-10 border-b border-white/10 pb-9">
       <div class="flex flex-wrap items-center gap-3 text-xs text-slate-400">
         <span class="text-violet-300">{post.data.category}</span>
@@ -36,7 +34,7 @@ const { Content, headings } = await post.render();
     <CodeEnhancements />
     <div class="mt-16 border-t border-white/10 pt-7">
       <p class="text-sm text-slate-400">如果这篇文章对你有帮助，欢迎通过 GitHub 交流。</p>
-      <a class="mt-4 inline-block text-sm text-violet-200" href={`${import.meta.env.BASE_URL}blog/`}>继续阅读 →</a>
+      <a class="mt-4 inline-block text-sm text-violet-200" href={`${base}blog/`}>继续阅读 →</a>
     </div>
   </article>
 </BaseLayout>

@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
+const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const slugOf = (id: string) => id.replace(/\.(md|mdx)$/i, "");
 const posts = (await getCollection("posts", ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
@@ -12,7 +14,7 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft))
     <div class="mt-12 grid gap-4 md:grid-cols-2">
       {posts.map((post) => (
         <article class="panel card-hover p-6 sm:p-8">
-          <img class="mb-5 aspect-[1200/420] w-full rounded-xl border border-white/10 object-cover" src={`${import.meta.env.BASE_URL}covers/${post.id}.svg`} alt={`${post.data.title} 封面`} loading="lazy" />
+          <img class="mb-5 aspect-[1200/420] w-full rounded-xl border border-white/10 object-cover" src={`${base}covers/${slugOf(post.id)}.svg`} alt={`${post.data.title} 封面`} loading="lazy" />
           <div class="flex flex-wrap items-center gap-3 text-xs text-slate-400">
             <span class="text-violet-300">{post.data.category}</span>
             <span>·</span><time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString("zh-CN")}</time>
@@ -20,7 +22,7 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft))
           <h2 class="mt-5 text-2xl font-bold">{post.data.title}</h2>
           <p class="mt-4 leading-7 text-slate-400">{post.data.description}</p>
           <div class="mt-5 flex flex-wrap gap-2">{post.data.tags.map((tag) => <span class="rounded-full bg-white/5 px-3 py-1 text-xs text-slate-400">#{tag}</span>)}</div>
-          <a class="mt-7 inline-block text-sm text-violet-200" href={`${import.meta.env.BASE_URL}blog/${post.id}/`}>阅读文章 →</a>
+          <a class="mt-7 inline-block text-sm text-violet-200" href={`${base}blog/${slugOf(post.id)}/`}>阅读文章 →</a>
         </article>
       ))}
     </div>

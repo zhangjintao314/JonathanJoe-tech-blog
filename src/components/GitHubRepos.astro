@@ -1,93 +1,14 @@
 ---
 import { githubConfig } from "@/data/github";
-
-interface Repo {
-  name: string;
-  description: string | null;
-  html_url: string;
-  language: string | null;
-  stargazers_count: number;
-  forks_count: number;
-  updated_at: string;
-  fork?: boolean;
-}
-
-const demoRepos: Repo[] = [
-  { name: "Solar System Simulator", description: "Modern OpenGL solar system simulation.", html_url: "https://github.com/", language: "C++", stargazers_count: 0, forks_count: 0, updated_at: new Date().toISOString() },
-  { name: "AI Research Notes", description: "Experiments on generative AI systems.", html_url: "https://github.com/", language: "Python", stargazers_count: 0, forks_count: 0, updated_at: new Date().toISOString() },
-];
-
-let repos: Repo[] = demoRepos;
-let statusText = "请在 src/data/github.ts 中填写 GitHub 用户名；当前为演示数据。";
-
-async function fetchRepos(): Promise<Repo[]> {
-  if (!githubConfig.username || githubConfig.username === "YOUR_GITHUB_USERNAME") {
-    return demoRepos;
-  }
-  const headers: Record<string, string> = { Accept: "application/vnd.github+json" };
-  // 可选：通过环境变量设置 token 以提高 API 限额（CI 中设置 GITHUB_TOKEN 即可）
-  const token = import.meta.env.GITHUB_TOKEN;
-  if (token) headers.Authorization = `Bearer ${token}`;
-  const url = `https://api.github.com/users/${encodeURIComponent(githubConfig.username)}/repos?sort=updated&per_page=100&type=owner`;
-  const res = await fetch(url, { headers });
-  if (!res.ok) throw new Error(`GitHub API ${res.status}`);
-  let data = (await res.json()) as Repo[];
-  if (githubConfig.excludeForks) data = data.filter((r) => !r.fork);
-  if (githubConfig.pinnedRepos?.length) {
-    data.sort((a, b) => {
-      const ai = githubConfig.pinnedRepos.indexOf(a.name);
-      const bi = githubConfig.pinnedRepos.indexOf(b.name);
-      return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi);
-    });
-  }
-  return data.slice(0, githubConfig.maxRepos);
-}
-
-try {
-  repos = await fetchRepos();
-  if (repos !== demoRepos && repos.length > 0) {
-    statusText = `数据来自 GitHub 公共 API · ${githubConfig.username}`;
-  } else if (repos.length === 0) {
-    statusText = "没有公开仓库，当前显示演示项目。";
-  }
-} catch {
-  statusText = "GitHub API 暂不可用，已降级显示演示项目。";
-}
-
-const esc = (v: unknown) =>
-  String(v ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
 ---
 <section class="mt-16">
-  <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
-    <div>
-      <p class="text-xs tracking-[.25em] text-violet-300">OPEN SOURCE / GITHUB</p>
-      <h2 class="mt-2 text-2xl font-bold">GitHub 开源项目</h2>
-    </div>
-    {githubConfig.username !== "YOUR_GITHUB_USERNAME" && (
-      <a class="text-sm text-violet-200" href={`https://github.com/${githubConfig.username}`} target="_blank" rel="noreferrer">访问 GitHub ↗</a>
-    )}
-  </div>
-  <div class="grid gap-4 md:grid-cols-2">
-    {repos.map((r) => (
-      <a class="panel card-hover block p-5" href={esc(r.html_url)} target="_blank" rel="noreferrer">
-        <div class="flex justify-between gap-3">
-          <h3 class="truncate font-semibold text-violet-100">{esc(r.name)}</h3>
-          <span>↗</span>
-        </div>
-        <p class="mt-3 min-h-12 text-sm leading-6 text-slate-400">{esc(r.description || "暂无项目描述")}</p>
-        <div class="mt-4 flex flex-wrap gap-4 text-xs text-slate-500">
-          <span>{esc(r.language || "Code")}</span>
-          <span>★ {Number(r.stargazers_count || 0)}</span>
-          <span>⑂ {Number(r.forks_count || 0)}</span>
-          <span>{new Date(r.updated_at).toLocaleDateString()}</span>
-        </div>
-      </a>
-    ))}
-  </div>
-  <p class="mt-3 text-xs text-slate-500" aria-live="polite">{statusText}</p>
+ <div class="mb-6 flex flex-wrap items-end justify-between gap-3"><div><p class="text-xs tracking-[.25em] text-violet-300">OPEN SOURCE / GITHUB</p><h2 class="mt-2 text-2xl font-bold">GitHub 开源项目</h2></div>{githubConfig.username !== "YOUR_GITHUB_USERNAME" && <a class="text-sm text-violet-200" href={`https://github.com/${githubConfig.username}`} target="_blank" rel="noreferrer">访问 GitHub ↗</a>}</div>
+ <div id="github-repos" class="grid gap-4 md:grid-cols-2"><div class="panel p-5 text-sm text-slate-400">正在读取公开仓库信息…</div></div><p id="github-status" class="mt-3 text-xs text-slate-500" aria-live="polite"></p>
 </section>
+<script define:vars={{ config: githubConfig }}>
+const host=document.querySelector("#github-repos"),status=document.querySelector("#github-status");
+const esc=(v)=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fallback=[{name:"Solar System Simulator",description:"Modern OpenGL solar system simulation.",html_url:"https://github.com/",language:"C++",stargazers_count:0,forks_count:0,updated_at:new Date().toISOString()},{name:"AI Research Notes",description:"Experiments on generative AI systems.",html_url:"https://github.com/",language:"Python",stargazers_count:0,forks_count:0,updated_at:new Date().toISOString()}];
+const render=(repos)=>{if(!host)return;host.innerHTML=repos.map(r=>`<a class="panel card-hover block p-5" href="${esc(r.html_url)}" target="_blank" rel="noreferrer"><div class="flex justify-between gap-3"><h3 class="truncate font-semibold text-violet-100">${esc(r.name)}</h3><span>↗</span></div><p class="mt-3 min-h-12 text-sm leading-6 text-slate-400">${esc(r.description||"暂无项目描述")}</p><div class="mt-4 flex flex-wrap gap-4 text-xs text-slate-500"><span>${esc(r.language||"Code")}</span><span>★ ${Number(r.stargazers_count||0)}</span><span>⑂ ${Number(r.forks_count||0)}</span><span>${new Date(r.updated_at).toLocaleDateString()}</span></div></a>`).join("");};
+if(!config.username||config.username==="YOUR_GITHUB_USERNAME"){render(fallback);if(status)status.textContent="请在 src/data/github.ts 中填写 GitHub 用户名；当前为演示数据。";}else{try{const res=await fetch(`https://api.github.com/users/${encodeURIComponent(config.username)}/repos?sort=updated&per_page=100&type=owner`,{headers:{Accept:"application/vnd.github+json"}});if(!res.ok)throw Error(`GitHub API ${res.status}`);let repos=await res.json();if(config.excludeForks)repos=repos.filter(r=>!r.fork);if(config.pinnedRepos?.length)repos.sort((a,b)=>{const ai=config.pinnedRepos.indexOf(a.name),bi=config.pinnedRepos.indexOf(b.name);return (ai<0?999:ai)-(bi<0?999:bi);});repos=repos.slice(0,config.maxRepos);render(repos.length?repos:fallback);if(status)status.textContent=repos.length?`数据来自 GitHub 公共 API · ${config.username}`:"没有公开仓库，当前显示演示项目。";}catch{render(fallback);if(status)status.textContent="GitHub API 暂不可用，已降级显示演示项目。";}}
+</script>

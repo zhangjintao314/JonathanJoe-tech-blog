@@ -1,5 +1,5 @@
 ---
-title: "欢迎来到JonathanJoe的个人博客"
+title: "欢迎来到南山逐北"
 description: "这是个人技术博客的第一篇文章：记录为什么开始写作，以及这里会持续分享什么。"
 pubDate: 2026-11-08
 author: "Jonathan Joe"

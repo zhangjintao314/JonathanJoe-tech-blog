@@ -1,18 +1,10 @@
 ---
 import { site } from "@/data/site";
-const base = import.meta.env.BASE_URL;
-// BASE_URL 保证以 / 结尾，直接拼接即可
-const url = (href: string) => href === "/" ? base : `${base}${href.replace(/^\/+/, "")}`;
-// 获取当前路径（去掉 base 前缀）用于高亮当前导航项
-const currentPath = Astro.url.pathname.replace(
-  new RegExp(`^${base.replace(/[/\\]/g, "\\$&")}`),
-  "/"
-);
 ---
 <header class="sticky top-0 z-40 border-b border-white/10 bg-[#080b17]/65 backdrop-blur-2xl">
   <div class="container-wide flex h-[72px] items-center justify-between">
-    <a href={base} class="flex items-center gap-3">
-      <span class="grid h-10 w-10 place-items-center rounded-xl border border-violet-300/30 bg-violet-400/10 text-lg font-black text-violet-200">J</span>
+    <a href={import.meta.env.BASE_URL} class="flex items-center gap-3">
+      <span class="grid h-10 w-10 place-items-center rounded-xl border border-violet-300/30 bg-violet-400/10 text-lg font-black text-violet-200">N</span>
       <span class="leading-tight">
         <span class="block text-sm font-bold tracking-[.16em]">{site.name}</span>
         <span class="block text-[10px] tracking-[.2em] text-slate-400">JONATHAN JOE / NOTES</span>
@@ -20,24 +12,24 @@ const currentPath = Astro.url.pathname.replace(
     </a>
     <nav class="hidden items-center gap-8 md:flex" aria-label="主导航">
       {site.nav.map((item) => (
-        <a class={`text-sm transition hover:text-violet-200 ${currentPath === item.href ? "text-violet-200" : "text-slate-300"}`}
-          href={url(item.href)}>
+        <a class={`text-sm transition hover:text-violet-200 ${Astro.url.pathname.replace(import.meta.env.BASE_URL, "/") === item.href ? "text-violet-200" : "text-slate-300"}`}
+          href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}${item.href === "/" ? "/" : item.href}`}>
           {item.label}
         </a>
       ))}
     </nav>
     <div class="flex items-center gap-2">
-      <a href={url("/search/")} class="hidden rounded-full border border-white/15 px-3 py-2 text-xs text-slate-200 hover:border-violet-300/50 hover:bg-violet-300/10 sm:inline-flex">⌕ 搜索</a>
+      <a href={`${import.meta.env.BASE_URL}search/`} class="hidden rounded-full border border-white/15 px-3 py-2 text-xs text-slate-200 hover:border-violet-300/50 hover:bg-violet-300/10 sm:inline-flex">⌕ 搜索</a>
       <button id="open-background-settings" class="rounded-full border border-white/15 px-3 py-2 text-xs text-slate-200 transition hover:border-violet-300/50 hover:bg-violet-300/10" type="button">
         <span aria-hidden="true">◐</span> 背景设置
       </button>
       <button id="mobile-menu-button" class="grid h-9 w-9 place-items-center rounded-lg border border-white/15 text-slate-200 md:hidden" aria-label="打开导航" aria-expanded="false" type="button">☰</button>
     </div>
   </div>
-  <nav id="mobile-menu" class="container-wide grid overflow-hidden border-t border-white/10 py-3 md:hidden transition-[grid-template-rows] duration-300 ease-out" style="grid-template-rows: 0fr;" aria-label="移动端导航">
-    <div class="flex min-h-0 flex-col gap-1">
-      <a class="rounded-lg px-3 py-2 text-sm text-violet-200 hover:bg-white/5" href={url("/search/")}>全文搜索</a>
-      {site.nav.map((item) => <a class="rounded-lg px-3 py-2 text-sm text-slate-200 hover:bg-white/5" href={url(item.href)}>{item.label}</a>)}
+  <nav id="mobile-menu" class="container-wide hidden border-t border-white/10 py-3 md:hidden" aria-label="移动端导航">
+    <div class="flex flex-col gap-1">
+      <a class="rounded-lg px-3 py-2 text-sm text-violet-200 hover:bg-white/5" href={`${import.meta.env.BASE_URL}search/`}>全文搜索</a>
+      {site.nav.map((item) => <a class="rounded-lg px-3 py-2 text-sm text-slate-200 hover:bg-white/5" href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}${item.href}`}>{item.label}</a>)}
     </div>
   </nav>
 </header>
@@ -47,9 +39,7 @@ const currentPath = Astro.url.pathname.replace(
   menuButton?.addEventListener("click", () => {
     const isOpen = menuButton.getAttribute("aria-expanded") === "true";
     menuButton.setAttribute("aria-expanded", String(!isOpen));
-    if (menu) {
-      menu.style.gridTemplateRows = isOpen ? "0fr" : "1fr";
-    }
+    menu?.classList.toggle("hidden", isOpen);
   });
   document.querySelector("#open-background-settings")?.addEventListener("click", () => {
     window.dispatchEvent(new CustomEvent("open-background-settings"));

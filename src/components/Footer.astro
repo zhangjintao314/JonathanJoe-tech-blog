@@ -1,6 +1,5 @@
 ---
 import { site } from "@/data/site";
-const base = import.meta.env.BASE_URL;
 ---
 <footer class="mt-24 border-t border-white/10 bg-[#080b17]/45">
   <div class="container-wide flex flex-col gap-4 py-8 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
@@ -10,8 +9,8 @@ const base = import.meta.env.BASE_URL;
     </div>
     <div class="flex gap-5">
       <a class="hover:text-violet-200" href={site.social.github} target="_blank" rel="noreferrer">GitHub ↗</a>
-      <a class="hover:text-violet-200" href={`mailto:${site.social.email}`}>Email ↗</a>
-      <a class="hover:text-violet-200" href={`${base}rss.xml`}>RSS</a>
+      <a class="hover:text-violet-200" href={site.social.email}>Email ↗</a>
+      <a class="hover:text-violet-200" href={`${import.meta.env.BASE_URL}rss.xml`}>RSS</a>
     </div>
   </div>
 </footer>

@@ -2,81 +2,27 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 import { projects } from "@/data/projects";
+const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const slugOf = (id: string) => id.replace(/\.(md|mdx)$/i, "");
 const posts = (await getCollection("posts", ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 3);
 ---
-<BaseLayout title="Jonathan Joe" description="Jonathan Joe 的个人技术博客，记录软件工程、硬件工程、人工智能与创造。">
-  <section class="container-wide animate-rise grid min-h-[620px] items-center gap-12 py-20 lg:grid-cols-[1.15fr_.85fr]">
-    <div>
-      <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-violet-300/25 bg-violet-300/10 px-4 py-2 text-xs tracking-wider text-violet-200">
-        <span class="h-2 w-2 rounded-full bg-emerald-400"></span> SOFTWARE · AI · SYSTEMS
+<BaseLayout title="Jonathan Joe" description="Jonathan Joe 的个人技术品牌空间，记录软件工程、人工智能、软硬件系统与创造。">
+  <section class="hero-shell">
+    <div class="hero-grid"></div><div class="hero-orb hero-orb-one"></div><div class="hero-orb hero-orb-two"></div>
+    <div class="container-wide relative grid min-h-[680px] items-center gap-14 py-20 lg:grid-cols-[1.12fr_.88fr]">
+      <div class="animate-rise"><div class="hero-status"><span class="status-pulse"></span> INDEPENDENT ENGINEER · ALWAYS BUILDING</div><p class="section-kicker mt-8">SOFTWARE / ARTIFICIAL INTELLIGENCE / SYSTEMS</p>
+        <h1 class="hero-title mt-5">探索技术边界，<br/><span class="gradient-text">构建真实世界。</span></h1>
+        <p class="mt-7 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">你好，我是 <strong class="text-white">Jonathan Joe</strong>。这里记录工程实践、人工智能研究、底层系统，以及那些值得亲手实现的想法。</p>
+        <div class="mt-9 flex flex-wrap gap-3"><a class="btn-primary" href={`${base}blog/`}>探索技术文章 ↗</a><a class="btn-secondary" href={`${base}projects/`}>查看工程项目</a></div>
+        <div class="mt-14 grid max-w-xl grid-cols-3 gap-5 border-t border-white/10 pt-6"><div><p class="stat-number">01</p><p class="mt-1 text-xs text-slate-500">ENGINEERING</p></div><div><p class="stat-number">02</p><p class="mt-1 text-xs text-slate-500">ARTIFICIAL INTELLIGENCE</p></div><div><p class="stat-number">∞</p><p class="mt-1 text-xs text-slate-500">CURIOSITY</p></div></div>
       </div>
-      <h1 class="max-w-3xl text-5xl font-black leading-[1.12] tracking-tight sm:text-6xl lg:text-7xl">
-        探索技术边界，<br /><span class="gradient-text">构建真实世界。</span>
-      </h1>
-      <p class="mt-7 max-w-xl text-base leading-8 text-slate-300 sm:text-lg">
-        这里是 Jonathan Joe 的个人技术空间。记录工程实践、人工智能研究、底层系统与那些值得亲手实现的想法。
-      </p>
-      <div class="mt-9 flex flex-wrap gap-3">
-        <a class="btn-primary" href={`${import.meta.env.BASE_URL}blog/`}>阅读技术文章 <span>→</span></a>
-        <a class="btn-secondary" href={`${import.meta.env.BASE_URL}projects/`}>探索项目</a>
-      </div>
-      <div class="mt-14 grid max-w-lg grid-cols-3 gap-5 border-t border-white/10 pt-6">
-        <div><p class="text-2xl font-bold text-white">01</p><p class="mt-1 text-xs text-slate-400">Engineering</p></div>
-        <div><p class="text-2xl font-bold text-white">02</p><p class="mt-1 text-xs text-slate-400">Artificial Intelligence</p></div>
-        <div><p class="text-2xl font-bold text-white">∞</p><p class="mt-1 text-xs text-slate-400">Curiosity</p></div>
-      </div>
-    </div>
-    <div class="relative mx-auto w-full max-w-md">
-      <div class="absolute -inset-5 rounded-[2rem] bg-gradient-to-br from-violet-500/20 to-cyan-400/10 blur-2xl"></div>
-      <div class="glass relative overflow-hidden rounded-[2rem] p-7 sm:p-9">
-        <div class="flex items-center justify-between text-xs text-slate-400"><span>PERSONAL KNOWLEDGE BASE</span><span>● ONLINE</span></div>
-        <div class="my-12">
-          <div class="mx-auto grid h-36 w-36 place-items-center rounded-full border border-violet-200/30 bg-gradient-to-br from-violet-500/20 to-cyan-300/10 shadow-[0_0_80px_rgba(139,123,255,.2)]">
-            <span class="text-7xl font-black gradient-text">J</span>
-          </div>
-          <h2 class="mt-8 text-center text-2xl font-bold">JonathanJoe-blog</h2>
-          <p class="mt-2 text-center text-sm text-slate-400">Think deeply. Build boldly.</p>
-        </div>
-        <div class="space-y-3 border-t border-white/10 pt-5 text-sm">
-          <div class="flex justify-between"><span class="text-slate-400">Focus</span><span>AI / Systems / C++</span></div>
-          <div class="flex justify-between"><span class="text-slate-400">Approach</span><span>Research × Engineering</span></div>
-          <div class="flex justify-between"><span class="text-slate-400">Principle</span><span>Learn by building</span></div>
-        </div>
-      </div>
+      <div class="hero-console-wrap animate-rise" style="animation-delay:160ms"><div class="hero-console glass"><div class="flex items-center justify-between border-b border-white/10 pb-4"><div class="flex items-center gap-2"><span class="console-dot"></span><span class="console-dot"></span><span class="console-dot"></span></div><span class="text-[10px] tracking-[.2em] text-slate-500">JONATHAN / CORE</span></div>
+        <div class="relative flex min-h-[310px] items-center justify-center overflow-hidden"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="orbit orbit-c"></div><div class="core-monogram">J<span>.</span></div><span class="orbit-label label-ai">AI / MODELS</span><span class="orbit-label label-sys">SYSTEMS</span><span class="orbit-label label-build">BUILD / TEST</span></div>
+        <div class="grid grid-cols-2 gap-3 border-t border-white/10 pt-5 text-xs"><div><p class="text-slate-500">CURRENT FOCUS</p><p class="mt-2 font-semibold text-slate-200">Generative AI · World Models</p></div><div><p class="text-slate-500">WORKING PRINCIPLE</p><p class="mt-2 font-semibold text-slate-200">Research × Engineering</p></div></div></div><div class="console-float glass"><span class="text-violet-200">✳</span><span><b class="block text-xs text-white">Learn by building</b><small class="text-[10px] text-slate-500">Ideas become systems.</small></span></div></div>
     </div>
   </section>
-
-  <section class="container-wide pb-8">
-    <div class="mb-7 flex items-end justify-between">
-      <div><p class="text-xs tracking-[.25em] text-violet-300">LATEST WRITING</p><h2 class="mt-2 text-3xl font-bold">最新文章</h2></div>
-      <a class="text-sm text-violet-200 hover:text-white" href={`${import.meta.env.BASE_URL}blog/`}>全部文章 →</a>
-    </div>
-    <div class="grid gap-4 md:grid-cols-3">
-      {posts.map((post) => (
-        <a class="panel card-hover p-6" href={`${import.meta.env.BASE_URL}blog/${post.id}/`}>
-          <p class="text-xs text-violet-300">{post.data.category} · {post.data.pubDate.toLocaleDateString("zh-CN")}</p>
-          <h3 class="mt-4 text-lg font-bold">{post.data.title}</h3>
-          <p class="mt-3 line-clamp-3 text-sm leading-7 text-slate-400">{post.data.description}</p>
-          <span class="mt-6 inline-block text-sm text-violet-200">阅读全文 →</span>
-        </a>
-      ))}
-      {posts.length === 0 && <div class="panel p-6 text-sm text-slate-400">文章正在整理中，稍后再来看看。</div>}
-    </div>
-  </section>
-
-  <section class="container-wide mt-20 pb-8">
-    <div class="mb-7"><p class="text-xs tracking-[.25em] text-violet-300">SELECTED WORK</p><h2 class="mt-2 text-3xl font-bold">正在探索的项目</h2></div>
-    <div class="grid gap-4 md:grid-cols-3">
-      {projects.map((project, index) => (
-        <div class="panel card-hover p-6">
-          <div class="flex items-center justify-between"><span class="text-xs text-slate-500">0{index + 1} / {project.category}</span><span class="rounded-full bg-violet-300/10 px-2 py-1 text-[10px] text-violet-200">{project.status}</span></div>
-          <h3 class="mt-6 text-lg font-bold">{project.title}</h3>
-          <p class="mt-3 min-h-20 text-sm leading-7 text-slate-400">{project.description}</p>
-          <div class="mt-5 flex flex-wrap gap-2">{project.tags.map((tag) => <span class="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-slate-400">{tag}</span>)}</div>
-        </div>
-      ))}
-    </div>
-    <div class="mt-6 text-right"><a class="text-sm text-violet-200" href={`${import.meta.env.BASE_URL}projects/`}>查看全部项目 →</a></div>
-  </section>
+  <section class="container-wide py-14 sm:py-20"><div class="mb-8 flex items-end justify-between"><div><p class="section-kicker">LATEST WRITING / 01</p><h2 class="mt-3 text-3xl font-bold">最新文章<span class="gradient-text">.</span></h2></div><a class="text-sm text-violet-200" href={`${base}blog/`}>全部文章 ↗</a></div><div class="grid gap-4 md:grid-cols-3">{posts.map((post,index)=><a class="panel card-hover p-6" href={`${base}blog/${slugOf(post.id)}/`}><p class="text-xs text-violet-300">NOTE / 0{index+1} · {post.data.category}</p><h3 class="mt-5 text-lg font-bold">{post.data.title}</h3><p class="mt-3 line-clamp-3 text-sm leading-7 text-slate-400">{post.data.description}</p><span class="mt-6 inline-block text-sm text-violet-200">阅读全文 →</span></a>)}</div></section>
+  <section class="container-wide py-10"><div class="mb-8"><p class="section-kicker">SELECTED WORK / 02</p><h2 class="mt-3 text-3xl font-bold">正在探索的项目<span class="gradient-text">.</span></h2></div><div class="grid gap-4 md:grid-cols-3">{projects.map((project,index)=><article class="panel card-hover p-6"><p class="text-xs text-slate-500">PROJECT / 0{index+1} · {project.category}</p><h3 class="mt-5 text-lg font-bold">{project.title}</h3><p class="mt-3 min-h-20 text-sm leading-7 text-slate-400">{project.description}</p><div class="mt-5 flex flex-wrap gap-2">{project.tags.map(tag=><span class="tag-pill">{tag}</span>)}</div></article>)}</div><div class="mt-6 text-right"><a class="text-sm text-violet-200" href={`${base}projects/`}>查看全部项目 ↗</a></div></section>
+  <section class="container-wide py-14"><div class="contact-panel glass relative overflow-hidden rounded-3xl p-8 sm:p-12"><div class="relative z-10 max-w-2xl"><p class="section-kicker">LET'S CONNECT / 03</p><h2 class="mt-4 text-3xl font-black sm:text-4xl">保持好奇，保持创造。</h2><p class="mt-4 leading-8 text-slate-400">欢迎交流人工智能、系统工程、开源项目与技术实践。</p><a class="btn-primary mt-7" href="https://github.com/zhangjintao314" target="_blank" rel="noreferrer">在 GitHub 上找到我 ↗</a></div></div></section>
 </BaseLayout>

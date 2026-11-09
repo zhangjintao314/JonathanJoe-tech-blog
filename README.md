@@ -1,4 +1,4 @@
-#  Astro Personal Tech Blog
+# 南山逐北 · Astro Personal Tech Blog
 
 一个可部署到 GitHub Pages 的个人技术博客 MVP。
 
@@ -73,7 +73,7 @@ draft: false
 
 ## 配置 GitHub 仓库动态
 
-编辑 `src/data/github.ts`，确认 `username` 已设为你的 GitHub 用户名。网站通过 GitHub 公共 API 读取公开仓库，无需 Token；未配置或 API 不可用时会显示演示项目。可在 `pinnedRepos` 中指定优先展示的仓库名。
+编辑 `src/data/github.ts`，将 `YOUR_GITHUB_USERNAME` 替换为你的 GitHub 用户名。网站通过 GitHub 公共 API 读取公开仓库，无需 Token；未配置或 API 不可用时会显示演示项目。可在 `pinnedRepos` 中指定优先展示的仓库名。
 
 ## 搜索、目录与封面
 
@@ -109,7 +109,6 @@ git push -u origin main
 - 项目仓库 `username/repository`：自动设置 `base: /repository`
 - 用户/组织站点 `username/username.github.io`：使用根路径 `/`
 - 本地开发：使用根路径 `/`
-- 可通过环境变量 `SITE_BASE` 手动覆盖
 
 所有站内链接使用 `import.meta.env.BASE_URL`，避免部署到项目子路径后链接失效。
 
@@ -126,7 +125,7 @@ SITE_URL=https://your-domain.example SITE_BASE=/ npm run build
 - 当前背景预设使用 Unsplash 图片地址，需要访问互联网才能加载。你可以替换成自己拥有使用权的图片，并放在 `public/backgrounds/`。
 - 浏览器中的背景调节只影响当前访问者；想更改所有访客的默认背景，需要修改 `BackgroundSettings.astro` 中的默认预设或 `global.css` 初始变量并重新部署。
 - 本项目不包含评论后端、账号系统或数据库；GitHub Pages 是静态托管服务。
-- 搜索索引由 Pagefind 在 `npm run build` 时自动生成（`dist/pagefind/`）；开发模式下搜索页会显示提示信息。
+- 项目目前没有接入搜索索引服务，后续可增加 Pagefind。
 
 ## 目录结构
 
@@ -137,15 +136,14 @@ SITE_URL=https://your-domain.example SITE_BASE=/ npm run build
 ├── src
 │   ├── components
 │   │   ├── BackgroundSettings.astro
+│   │   ├── ReadingProgress.astro
 │   │   ├── CodeEnhancements.astro
+│   │   └── GitHubRepos.astro
 │   │   ├── Footer.astro
-│   │   ├── GitHubRepos.astro
-│   │   ├── Header.astro
-│   │   └── ReadingProgress.astro
+│   │   └── Header.astro
 │   ├── content
 │   │   └── posts
 │   ├── data
-│   │   ├── github.ts
 │   │   ├── projects.ts
 │   │   └── site.ts
 │   ├── layouts/BaseLayout.astro
